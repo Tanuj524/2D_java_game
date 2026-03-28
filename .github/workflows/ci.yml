@@ -1,0 +1,46 @@
+name: Simple Java CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build
+        run: |
+          if [ -f "pom.xml" ]; then
+            mvn clean install
+          elif [ -f "build.gradle" ]; then
+            chmod +x gradlew
+            ./gradlew build
+          else
+            echo "No build tool found"
+          fi
+
+      - name: Run tests
+        run: |
+          if [ -f "pom.xml" ]; then
+            mvn test
+          elif [ -f "build.gradle" ]; then
+            ./gradlew test
+          fi
+
+      - name: Upload game (JAR)
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-build
+          path: |
+            target/*.jar
+            build/libs/*.jar
