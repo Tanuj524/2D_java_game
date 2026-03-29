@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
+import main.UtilityTool;
 import main.gamepanel;
 import java.awt.Graphics2D;
 
@@ -27,28 +28,31 @@ public class TileManager {
     }
 
     public void getTileImage(){
-        try {
-            tile[0]=new Tile();
-            tile[1]=new Tile();
-            tile[2]=new Tile();
-            tile[3]=new Tile();
-            tile[4]=new Tile();
-            tile[5]=new Tile();
+            setup(0,"grass00",false);
+            setup(1,"wall",true);
+            setup(2,"water00",true);
+            setup(3,"earth",false);
+            setup(4,"tree",true);
+            setup(5,"sand",false);            
+        
+    }
 
-            tile[0].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/grass01.png"));
-            tile[1].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/wall.png"));
-            tile[1].collision=true;
-            tile[2].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/water00.png"));
-            tile[2].collision=true;
-            tile[3].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/earth.png"));
-            
-            tile[4].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/tree.png"));
-            tile[4].collision=true;
-            tile[5].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/sand.png"));
+
+
+    public void setup(int index,String imagePath,boolean collision){
+        UtilityTool uTool= new UtilityTool();
+        try {
+            tile[index]= new Tile();
+            tile[index].image=ImageIO.read(getClass().getResourceAsStream("../images/tiles/"+imagePath+".png"));
+            tile[index].image=uTool.scaleImage(tile[index].image,gp.tileSize,gp.tileSize);
+            tile[index].collision=collision;
         }catch(IOException e){
             e.printStackTrace();
         }
     }
+
+
+
     public void loadMap(){
         try{
             InputStream is=getClass().getResourceAsStream("../maps/world01.txt");
@@ -73,6 +77,10 @@ public class TileManager {
 
         }
     }
+
+
+
+
     public void draw(Graphics2D g2){
         int worldCol=0;
         int worldRow=0;
@@ -90,7 +98,7 @@ public class TileManager {
 worldX - gp.tileSize < gp.Player.worldX + gp.Player.screenX &&
 worldY + gp.tileSize > gp.Player.worldY - gp.Player.screenY &&
 worldY - gp.tileSize < gp.Player.worldY + gp.Player.screenY)
-           { g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize,gp.tileSize,null);}
+           { g2.drawImage(tile[tileNum].image, screenX, screenY,null);}
             worldCol++;
             if(worldCol==gp.maxWorldCol){
                 worldCol=0;

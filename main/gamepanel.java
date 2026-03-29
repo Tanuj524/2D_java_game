@@ -94,6 +94,11 @@ public class gamepanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g){
         super.paintComponent(g); //clear old frame(gives a clean canvas) also creates a temp drawing context g
         Graphics2D g2= (Graphics2D)g;
+
+        //debug stuff
+        long drawStart=0;
+        drawStart=System.nanoTime();
+
         tilemanager.draw(g2);
         for(int i=0;i<obj.length;i++){
             if(obj[i]!=null){
@@ -102,6 +107,11 @@ public class gamepanel extends JPanel implements Runnable {
         }
         Player.draw(g2);
         UI.draw(g2);
+
+        //debug
+        long drawEnd=System.nanoTime();
+        long passed=(drawEnd-drawStart);
+        System.out.println("time passed:"+passed);
         
         g2.dispose();
 
