@@ -3,11 +3,12 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import main.keyhandler;
+
 import java.awt.event.KeyEvent;
 
 public class KeyHandlerTest1{
 
-    private KeyEvent createKey(int keyCode) {
+    private KeyEvent createKeyPress(int keyCode) {
         return new KeyEvent(
             new java.awt.Canvas(),
             KeyEvent.KEY_PRESSED,
@@ -18,20 +19,46 @@ public class KeyHandlerTest1{
         );
     }
 
+    private KeyEvent createKeyRelease(int keyCode) {
+        return new KeyEvent(
+            new java.awt.Canvas(),
+            KeyEvent.KEY_RELEASED,
+            System.currentTimeMillis(),
+            0,
+            keyCode,
+            KeyEvent.CHAR_UNDEFINED
+        );
+    }
+
     @Test
-    void testAllMovementKeys() {
+    void testUpKey() {
         keyhandler kh = new keyhandler();
 
-        kh.keyPressed(createKey(KeyEvent.VK_W));
+        kh.keyPressed(createKeyPress(KeyEvent.VK_W));
         assertTrue(kh.upPressed);
+    }
 
-        kh.keyPressed(createKey(KeyEvent.VK_S));
+    @Test
+    void testDownKey() {
+        keyhandler kh = new keyhandler();
+
+        kh.keyPressed(createKeyPress(KeyEvent.VK_S));
         assertTrue(kh.downPressed);
+    }
 
-        kh.keyPressed(createKey(KeyEvent.VK_A));
+    @Test
+    void testLeftKey() {
+        keyhandler kh = new keyhandler();
+
+        kh.keyPressed(createKeyPress(KeyEvent.VK_A));
         assertTrue(kh.leftPressed);
+    }
 
-        kh.keyPressed(createKey(KeyEvent.VK_D));
+    @Test
+    void testRightKey() {
+        keyhandler kh = new keyhandler();
+
+        kh.keyPressed(createKeyPress(KeyEvent.VK_D));
         assertTrue(kh.rightPressed);
     }
 
@@ -39,12 +66,10 @@ public class KeyHandlerTest1{
     void testKeyRelease() {
         keyhandler kh = new keyhandler();
 
-        KeyEvent w = createKey(KeyEvent.VK_W);
-
-        kh.keyPressed(w);
+        kh.keyPressed(createKeyPress(KeyEvent.VK_W));
         assertTrue(kh.upPressed);
 
-        kh.keyReleased(w);
+        kh.keyReleased(createKeyRelease(KeyEvent.VK_W));
         assertFalse(kh.upPressed);
     }
 }
